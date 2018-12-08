@@ -38,12 +38,6 @@ one:
 	.single 1.0
 zeroseven:
 	.single 0.7
-two:
-	.single 2.0
-four:
-	.single 4.0
-eight:
-	.single 8.0
 	
 	.section .bss
 	.lcomm line, 32
@@ -55,23 +49,14 @@ eight:
 _start:
 	write $preambule, $preambule_len
 	
-	// r8 - row counter
-	movq $0, %r8
+	// j (r8) - row counter
+	movq $100, %r8
 rowLoop:
-	// r9 - column counter
-	movq $200, %r9
+	// i (r9) - column counter
+	movq $0, %r9
 columnLoop:
 	movq $0, %rcx
 
-	// test
-	movss two, %xmm0
-	movss four, %xmm1
-	movss eight, %xmm2
-	// 8 - 2 = 6
-	vsubss %xmm2, %xmm0, %xmm3
-	vsubss %xmm0, %xmm2, %xmm4
-
-	
 	// u(xmm0) = i(r9) / nx(200);
 	cvtsi2ss %r9, %xmm0
 	vdivss nx, %xmm0, %xmm0
@@ -79,7 +64,6 @@ columnLoop:
 	cvtsi2ss %r8, %xmm1
 	vdivss ny, %xmm1, %xmm1
 color:
-len:
 	// B[0](xmm2) = -2(mul00) + u(xmm0)*4(mul01)
 	vmulss mul01, %xmm0, %xmm2
 	vaddss mul00, %xmm2, %xmm2
@@ -118,7 +102,7 @@ len:
 	vaddss %xmm3, %xmm5, %xmm2
 	vmulss rgb_multiplier, %xmm2, %xmm2	
 
-	// save ir, ig and ib to rax, rdx, r10
+	// save ir, ig and ib to rax, rdx, r10 before calling u32toascii
 	cvtss2si %xmm0, %rax
 	cvtss2si %xmm1, %rdx
 	cvtss2si %xmm2, %r10
@@ -136,7 +120,7 @@ len:
 	movb $' ', line(%rcx)
 	incq %rcx
 
-	movq %r10, %rdx
+	movq %r10, %rax
 	call u32toascii
 	movl %eax, line(%rcx)
 	addq %rbx, %rcx
@@ -145,13 +129,13 @@ len:
 
 	write $line, %rcx
 
-	dec %r9
-	cmp $0, %r9
-	jnz columnLoop
+	inc %r9
+	cmp $200, %r9
+	jne columnLoop
 rowLoopContinue:
-	inc %r8
-	cmp $100, %r8
-	jne rowLoop
+	dec %r8
+	cmp $0, %r8
+	jnz rowLoop
 	
 _exit:
 	movq $SYS_exit, %rax
