@@ -13,6 +13,12 @@ all:	01_gradient
 02_ray.o:
 	as --gstabs+ -o 02_ray.o 02_ray.s
 
+03_circle: 03_circle.o u32toascii.o
+	ld -o 03_circle 03_circle.o u32toascii.o
+
+03_circle.o:
+	as --gstabs+ -o 03_circle.o 03_circle.s
+
 
 u32toascii.o:
 	as --gstabs+ -o u32toascii.o u32toascii.s
@@ -20,6 +26,7 @@ u32toascii.o:
 clean:
 	rm -f 01_gradient
 	rm -f 02_ray
+	rm -f 03_circle
 	rm -f *.o
 
 help:
@@ -29,4 +36,6 @@ help:
 	@echo "   all (default)"
 	@echo "   clean"
 	@echo "   01_gradient"
+	@echo "   02_ray"
+	@echo "   03_circle"
 	@echo ""
