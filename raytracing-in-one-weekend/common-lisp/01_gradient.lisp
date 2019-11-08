@@ -1,4 +1,6 @@
-(in-package :raytracing-in-one-weekend)
+(defpackage 01-gradient
+  (:use :cl))
+(in-package :01-gradient)
 
 (defparameter *x* 200)
 (defparameter *y* 100)
@@ -7,8 +9,8 @@
 (defun main ()
   (with-open-file (out *output* :direction :output :if-exists :supersede)
     (format out "P3~%~D ~D~%255~%" *x* *y*)
-    (loop for j from (- *y* 1) downto 0 do
-	 (loop for i from 0 to (- *x* 1) do
+    (loop for j downfrom (- *y* 1) to 0 do
+	 (loop for i from 0 below *x* do
 	      (let* ((r (/ i *x*))
 		     (g (/ j *y*))
 		     (b 0.2)
