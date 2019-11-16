@@ -1,29 +1,7 @@
 (defpackage 02-vector
-  (:use :cl))
+  (:use :cl :vec3))
+
 (in-package :02-vector)
-
-(defclass vec3 ()
-  ((x
-    :initarg :x
-    :accessor x)
-   (y
-    :initarg :y
-    :accessor y)
-   (z
-    :initarg :z
-    :accessor z)
-   (r
-    :initarg :r
-    :accessor r)
-   (g
-    :initarg :g
-    :accessor g)
-   (b
-    :initarg :b
-    :accessor b)))
-
-(defun make-vec3 (&key x y z r g b)
-  (make-instance 'vec3 :x x :y y :z z :r r :g g :b b))
 
 (defparameter *x* 200)
 (defparameter *y* 100)
