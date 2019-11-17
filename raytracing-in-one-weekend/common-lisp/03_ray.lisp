@@ -9,7 +9,7 @@
 
 (defmethod color ((r ray))
   (let* ((unit-direction (unit-vector (direction r)))
-	 (u (* 0.5 (+ (b unit-direction) 1))))
+	 (u (* 0.5 (+ (g unit-direction) 1))))
     (add (mul (- 1 u)
 	      (make-vec3 :r 1 :g 1 :b 1))
        (mul u
