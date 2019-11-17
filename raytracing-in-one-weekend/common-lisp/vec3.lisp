@@ -68,7 +68,7 @@
   (let ((k (/ 1 (squared-length vector))))
     (make-vec3 :r (* (r vector) 2)
 	       :g (* (g vector) 2)
-	       :b (* (b vevtor) 2))))
+	       :b (* (b vector) 2))))
 
 (defgeneric sub (left right))
 
@@ -106,4 +106,4 @@
 (defgeneric unit-vector (vector))
 
 (defmethod unit-vector ((vector vec3))
-  (/ vector (length vector)))
+  (div vector (len vector)))
