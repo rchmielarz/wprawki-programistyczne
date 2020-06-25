@@ -3,7 +3,7 @@
   .set SYS_exit, 93
 
 caption:
-  .ascii "Liczba:"
+  .ascii "GCD("
 caption_end:
   .set caption_len, caption_end - caption
 
@@ -15,8 +15,15 @@ caption_end:
   ecall
   .endm
 
+  .macro add_char char
+  li t0, \char
+  sb t0, (a0)
+  addi a2, a2, 1
+  addi a0, a0, 1
+  .endm
+
   .section .bss
-  .lcomm string, 32
+  .lcomm string, 100
 
   .section .text
   .global _start
@@ -55,23 +62,50 @@ innerStoreLoop:
   mv a1, t1
   ret
 
+  # a0 - first number
+  # a1 - second number
+  # returns:
+  # a0 - greatest common divisor
+gcd:
+  rem t0, a0, a1
+  beqz t0, answer
+  mv a0, a1
+  mv a1, t0
+  j gcd
+answer:
+  mv a0, a1
+  ret
+
 _start:
-  la a0, string
-  li a1, 1234
-  call u32toascii
-
-  li t0, '\n'
-  sb t0, (a0)
-  addi a1, a1, 1
-
-  # save string len
-  mv t0, a1
-
   write caption, caption_len
+  la a0, string
+  li a1, 2166
+  call u32toascii
+  # copy size
+  mv a2, a1
 
-  addi a0, zero, 1
+  add_char ','
+  li a1, 6099
+  call u32toascii
+  add a2, a2, a1
+
+  add_char ')'
+  add_char '='
+
+  #save current char address (a0) to a3
+  mv a3, a0
+  li a0, 2166
+  li a1, 6099
+  call gcd
+  mv a1, a0
+  mv a0, a3
+  call u32toascii
+  add a2, a2, a1
+
+  add_char '\n'
+
+  la a0, 1
   la a1, string
-  mv a2, t0
   addi a7, zero, SYS_write
   ecall
 

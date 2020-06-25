@@ -1,13 +1,13 @@
-all:	hello
+all:	gcd
 
-hello: hello.o
-	riscv64-linux-gnu-ld -o hello hello.o
+gcd: gcd.o
+	riscv64-linux-gnu-ld -o gcd gcd.o
 
-hello.o:
-	riscv64-linux-gnu-as --gstabs+ -o hello.o hello.S
+gcd.o:
+	riscv64-linux-gnu-as --gstabs+ -o gcd.o gcd.S
 
 clean:
-	rm -f hello
+	rm -f gcd
 	rm -f *.o
 
 help:
@@ -16,5 +16,5 @@ help:
 	@echo "TARGETS:"
 	@echo "   all (default)"
 	@echo "   clean"
-	@echo "   hello"
+	@echo "   gcd"
 	@echo ""
